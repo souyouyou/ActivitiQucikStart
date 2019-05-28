@@ -31,6 +31,8 @@ public class Cfg_Activiti {
         processEngineConfiguration.setAnnotationFontName("宋体");
         processEngineConfiguration.setLabelFontName("宋体");
 
+        //视图覆盖原表
+        processEngineConfiguration.setDbIdentityUsed(false);
         return processEngineConfiguration;
     }
 

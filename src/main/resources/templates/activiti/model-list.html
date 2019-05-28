@@ -47,7 +47,9 @@ $(document).ready(function(){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click"><span><img src="images/t01.png" /></span>添加</li>
+
+            <li class="click"><span><img src="images/t01.png" /></span>
+                <a href="javascript: AJAX.POST('/models/newModel')">绘制流程</a></li>
         <li class="click"><span><img src="images/t02.png" /></span>修改</li>
         <li><span><img src="images/t03.png" /></span>删除</li>
         <li><span><img src="images/t04.png" /></span>统计</li>
@@ -100,18 +102,18 @@ $(document).ready(function(){
 
 
     <table class="tablelist" id="deployment-list">
-        <thead>
-        <tr>
-            <th><input name="" type="checkbox" value="" checked="checked"/></th>
-            <th>编号<i class="sort"><img src="images/px.gif" /></i></th>
-            <th>模型名称</th>
-            <th>版本</th>
-            <th>部署时间</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
+
         <script id="deployments" type="text/html">
+            <thead>
+            <tr>
+                <th><input name="" type="checkbox" value="" checked="checked"/></th>
+                <th>编号<i class="sort"><img src="images/px.gif" /></i></th>
+                <th>模型名称</th>
+                <th>版本</th>
+                <th>部署时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
             {{each rows.list}}
             <tr>
                 <td><input name="" type="checkbox" value="" /></td>
@@ -125,7 +127,6 @@ $(document).ready(function(){
             {{/each}}
         </script>
 
-        </tbody>
     </table>
    
     <div class="pagin">

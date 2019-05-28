@@ -26,6 +26,7 @@ public class Cfg_View extends WebMvcConfigurerAdapter {
         registry.addViewController("right").setViewName("right");
         registry.addViewController("model-list").setViewName("activiti/model-list");
         registry.addViewController("editor").setViewName("activiti/modeler");
+        registry.addViewController("user-manage").setViewName("user/user-manage");
 
     }
 }
