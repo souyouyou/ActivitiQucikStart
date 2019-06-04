@@ -2,7 +2,8 @@ package com.krxinuo.activiti.controller;
 
 import com.krxinuo.activiti.vo.DeploymentResponse;
 import com.krxinuo.common.RestServiceController;
-import com.krxinuo.util.ToWeb;
+import com.krxinuo.util.response.ResultViewModelUtil;
+import net.sf.json.JSONObject;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,12 @@ public class DeploymentController implements RestServiceController<Deployment, S
     @Override
     public Object getOne(@PathVariable("id") String id) {
         Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(id).singleResult();
-        return ToWeb.buildResult().setObjData(new DeploymentResponse(deployment));
+//        return ToWeb.buildResult().setObjData(new DeploymentResponse(deployment));
+        return null;
     }
 
     @Override
-    public Object getList(@RequestParam(value = "rowSize", defaultValue = "1000", required = false) Integer rowSize, @RequestParam(value = "page", defaultValue = "1", required = false) Integer page) {
+    public Object getList(@RequestParam(value = "limit", defaultValue = "10", required = false) Integer rowSize, @RequestParam(value = "page", defaultValue = "1", required = false) Integer page) {
         List<Deployment> deployments = repositoryService.createDeploymentQuery()
                 .listPage(rowSize * (page - 1), rowSize);
         long count = repositoryService.createDeploymentQuery().count();
@@ -33,20 +35,15 @@ public class DeploymentController implements RestServiceController<Deployment, S
             list.add(new DeploymentResponse(deployment));
         }
 
-        return ToWeb.buildResult().setRows(
-                ToWeb.Rows.buildRows()
-                        .setRowSize(rowSize)
-                        .setTotalPages((int) (count/rowSize+1))
-                        .setTotalRows(count)
-                        .setList(list)
-                        .setCurrent(page)
-        );
-    }
+        JSONObject extraData = new JSONObject();
+        extraData.put("totalRows",count);
+
+        return ResultViewModelUtil.success(list,extraData);    }
 
     @Override
     public Object deleteOne(@PathVariable("id") String id) {
         repositoryService.deleteDeployment(id);
-        return ToWeb.buildResult().refresh();
+        return ResultViewModelUtil.refresh();
     }
 
     @Override

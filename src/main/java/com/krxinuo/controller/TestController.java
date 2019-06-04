@@ -1,11 +1,8 @@
 package com.krxinuo.controller;
 
-import com.krxinuo.entity.UserEntity;
+import com.krxinuo.entity.TUserEntity;
 import com.krxinuo.service.UserService;
 import org.activiti.engine.IdentityService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,16 +18,16 @@ public class TestController {
     private UserService userService;
     @RequestMapping(value = "test")
     public void test(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId("111");
-        userEntity.setUsername("Username");
-        userEntity.setNickname("NickName");
-        userEntity.setPassword("password");
-        userEntity.setEmail("EMail");
-        userEntity.setMobile("18646305941");
-        UserEntity userEntity1 = userService.saveUser(userEntity);
+        TUserEntity TUserEntity = new TUserEntity();
+        TUserEntity.setUsername("Username");
+        TUserEntity.setNickname("NickName");
+        TUserEntity.setPassword("password");
+        TUserEntity.setEmail("EMail");
+        TUserEntity.setMobile("18646305941");
+        TUserEntity TUserEntity1 = userService.saveUser(TUserEntity);
 
-        System.out.println(userEntity1.getNickname());
+
+        System.out.println(TUserEntity1.getNickname());
 
     }
 }

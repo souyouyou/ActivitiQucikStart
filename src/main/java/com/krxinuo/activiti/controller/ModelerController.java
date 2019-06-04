@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.krxinuo.common.RestServiceController;
-import com.krxinuo.util.Status;
-import com.krxinuo.util.ToWeb;
+import com.krxinuo.util.response.Code;
+import com.krxinuo.util.response.ResultViewModelUtil;
+import net.sf.json.JSONObject;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -30,6 +32,9 @@ public class ModelerController implements RestServiceController<Model, String>{
     RepositoryService repositoryService;
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    IdentityService identityService;
 
     /**
      * 新建一个空模型
@@ -68,7 +73,8 @@ public class ModelerController implements RestServiceController<Model, String>{
                 "http://b3mn.org/stencilset/bpmn2.0#");
         editorNode.put("stencilset", stencilSetNode);
         repositoryService.addModelEditorSource(id,editorNode.toString().getBytes("utf-8"));
-        return ToWeb.buildResult().redirectUrl("/editor?modelId="+id);
+
+        return ResultViewModelUtil.redirect("/editor?modelId="+id);
     }
 
 
@@ -81,21 +87,20 @@ public class ModelerController implements RestServiceController<Model, String>{
     @PostMapping("{id}/deployment")
     public Object deploy(@PathVariable("id")String id) throws Exception {
 
+        identityService.setAuthenticatedUserId("songyy");
         //获取模型
         Model modelData = repositoryService.getModel(id);
         byte[] bytes = repositoryService.getModelEditorSource(modelData.getId());
 
         if (bytes == null) {
-            return ToWeb.buildResult().status(Status.FAIL)
-                    .msg("模型数据为空，请先设计流程并成功保存，再进行发布。");
+            return ResultViewModelUtil.error(Code.FAIL.getCode(),"模型数据为空，请先设计流程并成功保存，再进行发布。");
         }
 
         JsonNode modelNode = new ObjectMapper().readTree(bytes);
 
         BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(modelNode);
         if(model.getProcesses().size()==0){
-            return ToWeb.buildResult().status(Status.FAIL)
-                    .msg("数据模型不符要求，请至少设计一条主线流程。");
+            return ResultViewModelUtil.error(Code.FAIL.getCode(),"数据模型不符要求，请至少设计一条主线流程。");
         }
         byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 
@@ -108,33 +113,31 @@ public class ModelerController implements RestServiceController<Model, String>{
         modelData.setDeploymentId(deployment.getId());
         repositoryService.saveModel(modelData);
 
-        return ToWeb.buildResult().refresh();
+        return ResultViewModelUtil.refresh();
     }
 
     @Override
     public Object getOne(@PathVariable("id") String id) {
         Model model = repositoryService.createModelQuery().modelId(id).singleResult();
-        return ToWeb.buildResult().setObjData(model);
+//        return ToWeb.buildResult().setObjData(model);
+        return null;
     }
 
     @Override
-    public Object getList(@RequestParam(value = "rowSize", defaultValue = "1000", required = false) Integer rowSize, @RequestParam(value = "page", defaultValue = "1", required = false) Integer page) {
+    public Object getList(@RequestParam(value = "limit", defaultValue = "1000", required = false) Integer rowSize, @RequestParam(value = "page", defaultValue = "1", required = false) Integer page) {
         List<Model> list = repositoryService.createModelQuery().listPage(rowSize * (page - 1)
                 , rowSize);
         long count = repositoryService.createModelQuery().count();
 
-        return ToWeb.buildResult().setRows(
-                ToWeb.Rows.buildRows().setCurrent(page)
-                        .setTotalPages((int) (count/rowSize+1))
-                        .setTotalRows(count)
-                        .setList(list)
-                        .setRowSize(rowSize)
-        );
+        JSONObject extraData = new JSONObject();
+        extraData.put("totalRows",count);
+
+        return ResultViewModelUtil.success(list,extraData);
     }
 
     public Object deleteOne(@PathVariable("id")String id){
         repositoryService.deleteModel(id);
-        return ToWeb.buildResult().refresh();
+        return ResultViewModelUtil.refresh();
     }
 
     @Override

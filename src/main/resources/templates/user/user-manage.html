@@ -2,34 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>网站后台管理系统HTML模板--模板之家 www.cssmoban.com</title>
+<title>信息管理系统</title>
 <link href="layui/css/layui.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/jquery.js"></script>
+<!--<script type="text/javascript" src="js/jquery.js"></script>-->
+<script src="/lib/js/jquery-1.10.2.min.js"></script>
+<script src="/lib/js/jquery.cookie.js"></script>
+<script src="/js/ajax-util.js"></script>
+<script src="/lib/js/template.js"></script>
 <script type="text/javascript" src="layui/layui.js"></script>
-<script type="text/javascript" src="user-manage.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-  $(".click").click(function(){
-  $(".tip").fadeIn(200);
-  });
-  
-  $(".tiptop a").click(function(){
-  $(".tip").fadeOut(200);
-});
-
-  $(".sure").click(function(){
-  $(".tip").fadeOut(100);
-});
-
-  $(".cancel").click(function(){
-  $(".tip").fadeOut(100);
-});
-
-});
-</script>
-
+<script type="text/javascript" src="user-manage.js?ver=<%=dateTime%>"></script>
 
 </head>
 
@@ -47,24 +29,28 @@ $(document).ready(function(){
     
     <div class="rightinfo">
     
-    <div class="tools">
-    
+    <div class="tools" id="myToolBar">
+
     	<ul class="toolbar">
-        <li class="click"><span><img src="images/t01.png" /></span>添加</li>
-        <li class="click"><span><img src="images/t02.png" /></span>修改</li>
-        <li><span><img src="images/t03.png" /></span>删除</li>
-        <li><span><img src="images/t04.png" /></span>统计</li>
+            <li class="click" onclick="create()"><span><img src="images/t01.png" /></span>添加</li>
+            <li class="click"><span><img src="images/t02.png" /></span>修改</li>
+            <li><span><img src="images/t03.png" /></span>删除</li>
+            <li><span><img src="images/t04.png" /></span>统计</li>
         </ul>
-        
-        
+
+
         <ul class="toolbar1">
         <li><span><img src="images/t05.png" /></span>设置</li>
         </ul>
-    
-    </div>
-        <table class="layui-table" id="demo" lay-filter="test"></table>
 
-    
+    </div>
+    <table class="tablelist" id="demo" lay-filter="tablelist"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="update">修改</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="assgin">分配角色</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="leaveApply">请假申请</a>
+    </script>
     <div class="tip">
     	<div class="tiptop"><span>提示信息</span><a></a></div>
         

@@ -1,7 +1,7 @@
 package com.krxinuo.util.exception;
 
-import com.krxinuo.util.Status;
-import com.krxinuo.util.ToWeb;
+import com.krxinuo.util.response.Code;
+import com.krxinuo.util.response.ResultViewModelUtil;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,8 +16,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(BaseException.class)
 	@ResponseBody
 	public Object customHandler(BaseException e){
-//		e.printStackTrace();
-		return ToWeb.buildResult().status(e.getCode()).msg(e.getMessage());
+		e.printStackTrace();
+		return ResultViewModelUtil.error(e.getCode(),e.getMessage());
 	}
 
 	//其他未处理的异常
@@ -25,6 +25,6 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public Object exceptionHandler(Exception e){
 		e.printStackTrace();
-		return ToWeb.buildResult().status(Status.FAIL).msg("系统错误");
+		return ResultViewModelUtil.error(Code.SYS_ERROR.getCode(),Code.SYS_ERROR.getMessage());
 	}
 }

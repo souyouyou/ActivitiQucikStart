@@ -1,7 +1,7 @@
 package com.krxinuo.service.impl;
 
 import com.krxinuo.dao.UserDao;
-import com.krxinuo.entity.UserEntity;
+import com.krxinuo.entity.TUserEntity;
 import com.krxinuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -17,19 +19,29 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public UserEntity saveUser(UserEntity entity) {
-        UserEntity userEntity = userDao.save(entity);
-        return userEntity;
+    public TUserEntity saveUser(TUserEntity entity) {
+        TUserEntity TUserEntity = userDao.save(entity);
+        return TUserEntity;
     }
 
     @Override
-    public Page<UserEntity> getUsers(Integer pageIndex, Integer pageSize, String sortOrder, String sortColumn) {
+    public Page<TUserEntity> getUsers(Integer page, Integer limit, String sortOrder, String sortColumn) {
 
         Sort sort = new Sort(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortColumn);
-        Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+        Pageable pageable = new PageRequest(page, limit, sort);
 
-        Page<UserEntity> users = userDao.findAll(pageable);
+        Page<TUserEntity> users = userDao.findAll(pageable);
 
         return users;
+    }
+
+    @Override
+    public TUserEntity getUserById(Long uid) {
+        return userDao.findOne(uid);
+    }
+
+    @Override
+    public List<TUserEntity> getUserList() {
+        return userDao.findAll();
     }
 }

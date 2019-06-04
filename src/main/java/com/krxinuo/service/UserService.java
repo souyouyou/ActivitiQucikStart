@@ -1,10 +1,17 @@
 package com.krxinuo.service;
 
-import com.krxinuo.entity.UserEntity;
+import com.krxinuo.entity.TUserEntity;
 import org.springframework.data.domain.Page;
 
-public interface UserService {
-    public UserEntity saveUser(UserEntity entity);
+import java.util.List;
 
-    public Page<UserEntity> getUsers(Integer pageIndex,Integer pageSize,String sortOrder,String sortColumn);
+public interface UserService {
+    TUserEntity saveUser(TUserEntity entity);
+
+    Page<TUserEntity> getUsers(Integer page, Integer limit, String sortOrder, String sortColumn);
+
+    TUserEntity getUserById(Long uid);
+
+    List<TUserEntity> getUserList();
+
 }

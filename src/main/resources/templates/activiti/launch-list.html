@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>部署管理</title>
+    <link href="layui/css/layui.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <!--<script type="text/javascript" src="js/jquery.js"></script>-->
+    <script src="/lib/js/jquery-1.10.2.min.js"></script>
+    <script src="/lib/js/jquery.cookie.js"></script>
+    <script src="/js/ajax-util.js"></script>
+    <script src="/lib/js/template.js"></script>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <script type="text/javascript" src="launch-list.js?ver=<%=dateTime%>"></script>
+
+</head>
+
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">数据表</a></li>
+        <li><a href="#">基本内容</a></li>
+    </ul>
+</div>
+
+<div class="rightinfo">
+
+    <div class="tools" id="myToolBar">
+
+<!--        <ul class="toolbar">-->
+<!--            <li class="click"><span><img src="images/t01.png" /></span>添加<a href="javascript: AJAX.POST('/models/newModel')">绘制流程</a></li>-->
+<!--            <li class="click"><span><img src="images/t02.png" /></span><a href="/editor?modelId={{$value.id}}" class="tablelink">修改</a></li>-->
+<!--            <li><span><img src="images/t03.png" /></span><a href="javascript: AJAX.DELETE('/models/{{$value.id}}')" class="tablelink">删除</a></li>-->
+<!--            <li><span><img src="images/t04.png" /></span><a href="javascript: AJAX.POST('/models/{{$value.id}}/deployment')">发布</a></li>-->
+<!--        </ul>-->
+
+
+        <ul class="toolbar1">
+            <li><span><img src="images/t05.png" /></span>设置</li>
+        </ul>
+
+    </div>
+    <table class="tablelist" id="demo" lay-filter="tablelist"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+    </script>
+
+
+
+
+
+
+
+</div>
+
+<script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+</body>
+</html>
+
